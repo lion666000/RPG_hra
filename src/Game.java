@@ -46,7 +46,8 @@ public class Game {
          hint: zkus použít for cyklus */
 
         for (int i = 0; i < 3; i++){
-            player.addItem("The sword of Tuah");
+            System.out.println("Zadej název itemu: ");
+            player.addItem(sc.nextLine());
         }
 
         int choice = 5;
@@ -59,8 +60,9 @@ public class Game {
             System.out.println("2 - souboj");
 
             /* ⭐ BONUS 3: přidávání a odebrání itemů uživatelem pomocí menu - zde jen odkomentuj, více níže
+             */
             System.out.println("3 - přidej item");
-            System.out.println("4 - odeber item"); */
+            System.out.println("4 - odeber item");
 
             System.out.println("5 - konec");
             System.out.println("-------------------------------------------------------------------");
@@ -100,7 +102,8 @@ public class Game {
 
                 opponent.generateStats();
                 for (int i = 0; i < 3; i++){
-                    opponent.addItem("The mace of Rah");
+                    System.out.println("Zadej název itemu: ");
+                    opponent.addItem(sc.nextLine());
                 }
 
                 // TODO vytvoř nepřítele (Character) (patří do 🎓 ZÁKLAD 11)
@@ -114,10 +117,27 @@ public class Game {
 
             // ⭐ BONUS 3:
             if (choice == 3) {
+
+                System.out.println("Zadej název itemu: ");
+
+                player.addItem(sc.nextLine());
+
                 // TODO načti item a přidej ho (patří do ⭐ BONUS 3)
             }
 
             if (choice == 4) {
+
+                ArrayList<String> inv = player.getInventory();
+
+                System.out.println("Inventory: ");
+                for (int i = 0; i < inv.size(); i++) {
+                    System.out.println((i+1) + ". " + inv.get(i));
+                }
+
+                System.out.println("Zadej pozici itemu: ");
+
+                player.removeItem(sc.nextInt()-1);
+
                 // TODO načti index a odeber item (patří do ⭐ BONUS 3)
             }
 
@@ -160,24 +180,67 @@ public class Game {
 
         boolean combat = true;
 
+        Random random = new Random();
+
+        int aMaxHp =  a.getHp();
+        int bMaxHp =  b.getHp();
+
         while (combat){
             int damageDealt = 0;
 
             if (a.getHp() > 0 &&  b.getHp() > 0) {
+                ArrayList<String> aInventory = a.getInventory();
+
+                for (int i = 0; i < aInventory.size(); i++) {
+
+                    if (a.getHp() < aMaxHp && aInventory.get(i).trim().toLowerCase().equals("lektvar")){
+                        a.removeItem(i);
+                        a.setHp(aMaxHp);
+                        System.out.println(a.getName() + " použil lektvar");
+                    }
+                }
+
                 damageDealt = a.getAttack();
+
+                int rand = random.nextInt(1, 100);
+
+                if (rand > 0 && rand <= 20) {
+                    damageDealt = damageDealt *3;
+                    System.out.println("Krytický zásah!");
+                }
+
                 b.lowerHp(damageDealt);
 
                 System.out.println(a.getName() + " zaůtočil na " + b.getName() + " a ubral " + damageDealt + " HP, " + b.getName() + " nyní má " + b.getHp() + " HP");
 
                 if (b.getHp() > 0){
+                    ArrayList<String> bInventory = b.getInventory();
+
+                    for (int i = 0; i < bInventory.size(); i++) {
+
+                        if (b.getHp() < bMaxHp && bInventory.get(i).trim().toLowerCase().equals("lektvar")){
+                            b.removeItem(i);
+                            b.setHp(bMaxHp);
+                            System.out.println(b.getName() + " použil lektvar");
+                        }
+                    }
+
                     damageDealt = b.getAttack();
+
+                    rand = random.nextInt(1, 100);
+
+                    if (rand > 0 && rand <= 20) {
+                        damageDealt = damageDealt *3;
+                        System.out.println("Krytický zásah!");
+                    }
+
                     a.lowerHp(damageDealt);
 
                     System.out.println(b.getName() + " zaůtočil na " + a.getName() + " a ubral " + damageDealt + " HP, " + a.getName() + " nyní má " + a.getHp() + " HP");
                 }
             }
             else {
-                if (a.getHp() <= 0) {
+                if (b.getHp() <= 0) {
                     System.out.println("\n" + a.getName() + " vyhrál");
                 }
                 else {
