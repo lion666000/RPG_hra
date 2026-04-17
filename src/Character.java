@@ -67,6 +67,11 @@ public class Character {
     public void removeItem(int index) {
         // hint: pozor na to, aby to nespadlo pokud nebude existovat
 
+        try {
+            inventory.remove(index);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Postava tento item nemá");
+        }
 
     }
 
@@ -76,7 +81,13 @@ public class Character {
         System.out.println("Name: " + name);
         System.out.println("HP: " + hp);
         System.out.println("Attack: " + attack);
+
         // ⭐ BONUS 1:
         // vypiš o inventář a to očíslovaně (1. item)
+
+        System.out.println("Inventory: ");
+        for (int i = 0; i < inventory.size(); i++) {
+            System.out.println((i+1) + ". " + inventory.get(i));
+        }
     }
 }
