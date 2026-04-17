@@ -67,6 +67,7 @@ public class Character {
     public void removeItem(int index) {
         // hint: pozor na to, aby to nespadlo pokud nebude existovat
 
+
     }
 
     // 🎓 ZÁKLAD 2: výpis postavy - jmeno, hp, attack (bez itemů))
